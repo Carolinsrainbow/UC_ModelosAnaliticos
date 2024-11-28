@@ -69,3 +69,15 @@ print(promedios_no_presentacion)
 # RESPUESTA 1: Más que a la efectividad de la presentación, la gran diferencia se da en las rentas promedios, 
 # por lo que es muy probable que la proyección de rentabilidad sea inferior por menor ingreso.
 
+
+# Regresión lineal
+
+
+# Ajustar un modelo de regresión lineal
+modelo <- lm(Profit ~ Presentation + Age + Monthly_Income + Gender, data = data)
+
+# Mostrar el resumen del modelo
+summary(modelo)
+
+
+#PREGUNTA 2: Incorpore en su análisis las variables de control disponibles. Con este nuevo análisis, ¿es efectiva la presentación? Explique
