@@ -25,6 +25,9 @@ library(readxl)
 
 # 2. Cargar datos ---------------------------------------------------------
 
+# PREGUNTA 1: Calcule la rentabilidad promedio de los clientes que vieron y la de los clientes que no vieron la presentación. ¿Es efectiva la presentación? Explique.
+# RESPUESTA 1: Más que a la efectividad de la presentación, la gran diferencia se da en las rentas promedios, 
+# por lo que es muy probable que la proyección de rentabilidad sea inferior por menor ingreso.
 archivo_base <- "/Users/carolinaherreraazolas/Downloads/Presenting_Banking_Products.xlsx"
 
 data <- read_excel(archivo_base) 
@@ -65,19 +68,35 @@ print(promedios_presentacion)
 print("Promedios para clientes que no asistieron a la presentación:")
 print(promedios_no_presentacion)
 
-# PREGUNTA 1: Calcule la rentabilidad promedio de los clientes que vieron y la de los clientes que no vieron la presentación. ¿Es efectiva la presentación? Explique.
-# RESPUESTA 1: Más que a la efectividad de la presentación, la gran diferencia se da en las rentas promedios, 
-# por lo que es muy probable que la proyección de rentabilidad sea inferior por menor ingreso.
-
-
-# Regresión lineal
-
-
-# Ajustar un modelo de regresión lineal
-modelo <- lm(Profit ~ Presentation + Age + Monthly_Income + Gender, data = data)
-
-# Mostrar el resumen del modelo
-summary(modelo)
+# Gráfico de densidad de ingreso mensual por grupo
+ggplot(data, aes(x = Monthly_Income, fill = factor(Presentation))) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Distribución de ingresos por grupo",
+       x = "Ingreso mensual",
+       y = "Densidad",
+       fill = "Presentación") +
+  theme_minimal()
 
 
 #PREGUNTA 2: Incorpore en su análisis las variables de control disponibles. Con este nuevo análisis, ¿es efectiva la presentación? Explique
+#RESPUESTA 2
+
+modelo <- lm(Profit ~ Presentation + Age + Monthly_Income + Gender, data = data)
+
+summary(modelo)
+
+data$predicted_profit <- predict(modelo, data)
+
+# Graficar las predicciones por grupo de presentación
+ggplot(data, aes(x = Monthly_Income, y = predicted_profit, color = factor(Presentation))) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(title = "Impacto ajustado de la presentación en la rentabilidad",
+       x = "Ingreso mensual",
+       y = "Rentabilidad ajustada",
+       color = "Presentación") +
+  theme_minimal()
+
+
+# 
+
